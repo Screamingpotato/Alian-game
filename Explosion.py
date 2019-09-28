@@ -18,13 +18,9 @@ class Explosion(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=actor.rect.center)
         
     def update(self):
-        self.rect.move_ip(self.x_velocity, 0)
+        self.life = self.life - 1
 
-        if not self.SCREENRECT.contains(self.rect):
-            self.x_velocity = -self.x_velocity
+        self.image = self.images[self.life//self.animation_cycle % 2]
 
-            self.rect.top = self.rect.bottom + 1
-            self.rect = self.rect.clamp(self.SCREENRECT)
-
-        self.frame = self.frame + 1
-        self.image = self.images[self.frame//self.animation_cycle % 3]
+        if (self.life <= 0):
+            self.kill()
