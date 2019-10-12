@@ -23,4 +23,4 @@ class Scoer(pygame.sprite.Sprite):
 
             msg = "Score: %d" % self.score_points
 
-            self.image = self.font.render(msg, 0, self.color)
+            self.image = self.front.render (score_message, 0, self,color)
