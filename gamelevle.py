@@ -16,3 +16,11 @@ class GameLevel(pygame.sprite.Sprite):
         self.update()
 
         self.rect = self.image.get_rect().move(450, 5)
+
+        def update(self):
+            if self.level != self.last_level:
+                self.last_level = self.level
+
+                lable = "Level: %d" % self.level
+
+                self.image = self.font.render(label, 0, self.color)

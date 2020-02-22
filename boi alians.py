@@ -1,7 +1,8 @@
 import random 
 import os.path
-
+import gamelevle
 import pygame
+from gamelevle import GameLevel
 from pygame.locals import Rect, Quit, KEYDOWN, K_RIGHT, K_LEFT, K_SPACE, \
     K_ESCAPE, FULLSCREEN
 from alian import Alien
@@ -42,7 +43,7 @@ def main(winstyle=0):
 
     pygame.mouse.set_visible(0)
 
-    background_tile_image = Utility.load_image("background.gif")
+    background_tile_image = utility.load_image("background.gif")
 
     background = pygame.Surface(SCREENRECT.size)
 
@@ -74,6 +75,7 @@ def main(winstyle=0):
 
     Alien(SCREENRECT)  
     if (pygame.font is not None):
+        
         all_game_rects.add(Score())
         all_game_rects.add(PlayerLives())
 
@@ -90,7 +92,8 @@ def main(winstyle=0):
 
 def check_game_level(score):
     if(GameLevel.level == 1 and score > 10):
-    GameLevel.level = 2
+        GameLevel.level = 2
+
     elif(GameLevel.level == 2 and score > 20):
         GameLevel.level = 3
     elif(GameLevel.level == 3 and score > 30):
@@ -98,26 +101,103 @@ def check_game_level(score):
 
 def set_game_obj_images():
     
-    player_image = Utility.load_image("player1.gif")
+    player_image = utility.load_image("player1.gif")
 
     Player.images = [player_image, pygame.transform.flip(player_image, 1, 0)]
 
-    explosion_image = Utility.load_image("explosion1.gif")
+    explosion_image = utility.load_image("explosion1.gif")
 
     Explosion.images = [explosion_image,
                         pygame.transform.flip(explosion_image, 1, 1)]
 
-    Alien.images = Utility.load_images(
+    Alien.images = utility.load_images(
         "alien1.gif", "alien2.gif", "alien3.gif")
 
-    Bomb.images = [Utility.load_image("bomb.gif")]
+    Bomb.images = [utility.load_image("bomb.gif")]
 
-    Shot.images = [Utility.load_image("shot.gif")]
+    Shot.images = [utility.load_image("shot.gif")]
 
-    icon = pygametransform.scale.(Alien.images[0], (32, 32))
+    icon = pygame.transform.scale(Alien.images[0], (32, 32))
 
     pygame.desplay.set_icon(icon)
 
     pygame.desplay.set_caption("boi parti")
 
+# for x_position in rang(0, SCREENRECT.width)
+
+def set_game_sound():
+    if pygame.mixer and not  pygame.mixer.get_init():
+        print("warning, no sound")
+        pygame.mixer = None
+
+    if pygame.mixer:
+        music = os.path.join(main_directory, "data", "house_lo.wav")
+
+        pygame.mixer.music.load(music)
+
+        pygame.mixer.music.set._volume(.2)
+
+        pygame.mixer.music.play(-1)
+
+def game_loop(all_game_rects, screen, backround, shots, last_alien, aliens, sponge_aliens, bombs, winstyle, bestdepth, FULLSCREEN):
+
+    clock = pygame.time.Clock()
+    player = Player(SCREENRECT)
+    green_alien = GreenAlien(SCREENRECT)
+
+alienreload = ALIEN_RELOAD
+
+boom_sound = utility.load_sound("boom.wav")
+
+
+while (player.alive() is True):
+
+    for event in pygame.event.get():
+
+         if event.type == QUIT or \
+            (event.type == KEYDOWN and event.key == K_ESCAPE):
+            return
+         elif event.type == KEYDOWN:
+            if event.key == pygame.K_f:
+                if not FULLSCREEN:
+                    print("Changing to FULLSCREEN")
+                    screen_backup = screen.copy()
+
+                    screen = pygame.desplay.set_mode(
+                        SCREENRECT.size,
+                        winstyle | FULLSCREEN,
+                        bestdepth
+                    )
+                    screen.blit(screen_backup, (0, 0))
+
+                else:
+                    print("changing to windowed mode")
+                    screen_backup = screen.copy()
+                    screen = pygame.desplay.set_mode(
+                        SCREENRECT.size, 
+                        winstyle,
+                        bestdepth
+                    )
+                    screen.blit(screen_backup, (0, 0))
+
+                pygame.desplay.flip()
+                FULLSCREEN = not FULLSCREEN
+
+    all_game_rects.clear(screen, backround)
     
+    all_game_rects.update()
+
+    handle_player_imput(player, shots, shoot_sound)
+
+    if alienreload:
+        alienreload = alienreload - 1 
+    elif not int(random.random() * ALIEN_ODDS):
+        alienreload = ALIEN_RELOAD
+
+        Alien(SCREENRECT)
+
+   # if(GameLevel.level == 2):
+    #    if(aimbox_spawned is False)
+
+    if(GameLevel.level == 1):
+        if last_alien and not int (random.random() * BOMB_ODDS):
