@@ -148,7 +148,7 @@ def game_loop(all_game_rects, screen, backround, shots, last_alien, aliens, spon
 alienreload = ALIEN_RELOAD
 
 boom_sound = utility.load_sound("boom.wav")
-
+shoot_sound = utility.load_sound("car_door.wav")
 
 while (player.alive() is True):
 
@@ -169,6 +169,8 @@ while (player.alive() is True):
                         bestdepth
                     )
                     screen.blit(screen_backup, (0, 0))
+                pygame.display.flip()
+                FULLSCREEN = not FULLSCREEN
 
                 else:
                     print("changing to windowed mode")
@@ -192,12 +194,6 @@ while (player.alive() is True):
     if alienreload:
         alienreload = alienreload - 1 
     elif not int(random.random() * ALIEN_ODDS):
-        alienreload = ALIEN_RELOAD
+     alienreload = ALIEN_RELOAD
 
-        Alien(SCREENRECT)
-
-   # if(GameLevel.level == 2):
-    #    if(aimbox_spawned is False)
-
-    if(GameLevel.level == 1):
-        if last_alien and not int (random.random() * BOMB_ODDS):
+    Alien(SCREENRECT)
