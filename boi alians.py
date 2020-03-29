@@ -196,4 +196,48 @@ while (player.alive() is True):
     elif not int(random.random() * ALIEN_ODDS):
      alienreload = ALIEN_RELOAD
 
-    Alien(SCREENRECT)
+     Alien(SCREENRECT
+     
+    if last_alien and not int(random.random() * BOMB_ODDS):
+      Bomb(last_alien.sprite)
+
+detect_collision(player, aliens, shots, bombs, boom_sound)
+
+  for alien in pygame.sprite.spritecollide(player, aliens, 1):
+    boom_sound.play()
+    Explosion(alien)
+    Explosion(player)
+
+    Score.score_points = Score.score_points + 1
+
+    check_game_level(Score.score_points)
+
+    PlayerLives.lives - Player.PlayerLives - 1
+
+    check_player_life(player)
+
+  for alien in pygame.sprite.groupcollide(shots, aliens, 1, 1).keys():
+    boom_sound.play()
+    Explosion(alien)
+
+    Score.score_points = Score.score_points + 1
+
+    check_game_level(Score.score_points)
+
+  for bpmb in pygame.sprite.spritecollide(player, bombs, 1):
+    Explosions(player)
+    boom_sound.play()
+
+    Explosion(bomb)
+    boom_sound.play()
+
+    playerlives.lives = playerlives.lives - 1
+
+    check_player_life(player)
+
+    is_dirty  = all_game_rects.draw(screen)
+    pygame.display.update(is_dirty)
+
+    clock.tick(60)
+
+  return clock 
