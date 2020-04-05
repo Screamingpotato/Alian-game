@@ -240,4 +240,4 @@ detect_collision(player, aliens, shots, bombs, boom_sound)
 
     clock.tick(60)
 
-  return clock 
+  return Clock 
